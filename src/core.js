@@ -31,7 +31,8 @@ async function pruneNonCriticalCssLauncher ({
   screenshots,
   propertiesToRemove,
   maxEmbeddedBase64Length,
-  debuglog
+  debuglog,
+  htmltag
 }) {
   let _hasExited = false
   const takeScreenshots = screenshots && screenshots.basePath
@@ -133,6 +134,14 @@ async function pruneNonCriticalCssLauncher ({
       })
       debuglog('generateCriticalCss done, now postformat')
 
+      const html = await page.evaluate(
+        ele => {
+          window.jQuery('app').find(':hidden').remove()
+          return Promise.resolve(document.querySelector('app').innerHTML)
+        },
+        { ele: htmltag }
+      )
+
       const formattedCss = postformatting({
         criticalAstRules,
         propertiesToRemove,
@@ -155,7 +164,7 @@ async function pruneNonCriticalCssLauncher ({
         debuglog('take after screenshot DONE: ' + afterPath)
       }
 
-      cleanupAndExit({ returnValue: formattedCss })
+      cleanupAndExit({ returnValue: { formattedCss, html } })
     } catch (e) {
       cleanupAndExit({ error: e })
     }

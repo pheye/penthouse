@@ -203,13 +203,13 @@ const generateCriticalCssWrapped = async function generateCriticalCssWrapped (
     }
 
     stdErr += debuglog('call generateCriticalCssWrapped')
-    let formattedCss
+    let formattedCss, retval
     try {
       _browserPagesOpen++
       debuglog(
         'adding browser page for generateCriticalCss, now: ' + _browserPagesOpen
       )
-      formattedCss = await generateCriticalCss({
+      retval = await generateCriticalCss({
         browser,
         url: options.url,
         astRules,
@@ -230,7 +230,8 @@ const generateCriticalCssWrapped = async function generateCriticalCssWrapped (
           'number'
           ? options.maxEmbeddedBase64Length
           : DEFAULT_MAX_EMBEDDED_BASE64_LENGTH,
-        debuglog
+        debuglog,
+        htmltag: options.htmltag
       })
       _browserPagesOpen--
       debuglog(
@@ -279,6 +280,7 @@ const generateCriticalCssWrapped = async function generateCriticalCssWrapped (
       cleanupAndExit({ error: err })
       return
     }
+    formattedCss = retval.formattedCss
     stdErr += debuglog('generateCriticalCss done')
     if (formattedCss.trim().length === 0) {
       // TODO: this error should surface to user
@@ -289,7 +291,7 @@ const generateCriticalCssWrapped = async function generateCriticalCssWrapped (
       return
     }
 
-    cleanupAndExit({ returnValue: formattedCss })
+    cleanupAndExit({ returnValue: retval })
   })
 }
 
