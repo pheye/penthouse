@@ -356,7 +356,7 @@ const m = (module.exports = function (options, callback) {
         if (typeof options.css === 'string') {
           cssString = await readFilePromise(options.css, 'utf8')
         } else {
-          console.log('options:', options.css)
+          debuglog('options:', options.css)
           for (let file of options.css) {
             cssString += await readFilePromise(file, 'utf8')
           }
