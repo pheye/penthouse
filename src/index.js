@@ -219,8 +219,7 @@ const generateCriticalCssWrapped = async function generateCriticalCssWrapped (
         userAgent: options.userAgent || DEFAULT_USER_AGENT,
         renderWaitTime: options.renderWaitTime || DEFAULT_RENDER_WAIT_TIMEOUT,
         timeout: timeoutWait,
-        blockJSRequests: typeof options.blockJSRequests !==
-          'undefined'
+        blockJSRequests: typeof options.blockJSRequests !== 'undefined'
           ? options.blockJSRequests
           : DEFAULT_BLOCK_JS_REQUESTS,
         customPageHeaders: options.customPageHeaders,
@@ -351,7 +350,15 @@ const m = (module.exports = function (options, callback) {
     // support legacy mode of passing in css file path instead of string
     if (!options.cssString && options.css) {
       try {
-        const cssString = await readFilePromise(options.css, 'utf8')
+        let cssString = ''
+        if (typeof options.css === 'string') {
+          cssString = await readFilePromise(options.css, 'utf8')
+        } else {
+          console.log('options:', options.css)
+          for (let file of options.css) {
+            cssString += await readFilePromise(file, 'utf8')
+          }
+        }
         options = Object.assign({}, options, { cssString })
       } catch (err) {
         debuglog('error reading css file: ' + options.css + ', error: ' + err)

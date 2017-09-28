@@ -22,6 +22,7 @@
   },
   "scripts": {
     "lint": "standard \"src/**/*.js\"",
+    "lint-fix": "standard --fix \"src/**/*.js\"",
     "test": "mocha --compilers js:babel-core/register test/core-tests",
     "test-all": "mocha --compilers js:babel-core/register",
     "precommit": "lint-staged",
@@ -47,6 +48,10 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.4.0",
     "chai": "^1.9.1",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-node": "^5.1.1",
+    "eslint-plugin-react": "^7.4.0",
+    "eslint-plugin-standard": "^3.0.1",
     "global-mocha": "^1.0.1",
     "gm": "^1.21.1",
     "husky": "^0.13.3",
